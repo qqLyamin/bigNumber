@@ -23,12 +23,19 @@ void invert_string( T & tmp ) {
 class bigNumber
 {
     short arr[SIZE_OF_ARRAY];
+    short currentSize = 0;
     quint sizeOfInt = sizeof(int);
 public:
     bigNumber(){
         memset(arr, 0, SIZE_OF_ARRAY);
     }
-    bigNumber(const QString &);
+    bigNumber(const QString & income);
+
+    bigNumber & operator+(const bigNumber & other);
+    bigNumber & operator=(const bigNumber & other);
+
+    friend std::ostream & operator<< (std::ostream &out, const bigNumber & number);
+    short getSize();
 };
 
 #endif // BIGNUMBER_H
