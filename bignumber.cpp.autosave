@@ -1,0 +1,43 @@
+#include "bignumber.h"
+#include <QDebug>
+
+bigNumber::bigNumber(const QString & income)
+{
+    int outputIndex = 0;
+    int LENGTH = income.length() - 1;
+    QString tmpNumber;
+    while ( LENGTH > 0 ) {
+        for (int i = 0; i < 4; ++i, --LENGTH) {
+            tmpNumber += income[LENGTH];
+        }
+        invert_string(tmpNumber);
+        arr[outputIndex] = tmpNumber.toShort();
+        outputIndex++;
+        tmpNumber = "";
+    }
+    currentSize = outputIndex;
+}
+
+bigNumber & bigNumber::operator+(const bigNumber & other)
+{
+    bool saturation = false;
+    int SIZE;
+    SIZE = currentSize > other.currentSize ? currentSize : other.currentSize;
+    
+    for ( int i = 0 ; i < SIZE; ++i) {
+        if ( arr[i] + other.arr[i] > 9999 || (saturation == true && arr[i] + other.arr[i] > 9998) ) {            
+            saturation = true;
+        } else {
+            saturation = false;
+        }
+        this->arr[i] = (arr[i] + other.arr[i]) % 10000;
+        if (saturation) this->arr[i] += 1;
+    }
+    
+    return * this;
+}
+
+short bigNumber::getSize()
+{
+    return currentSize;
+}
