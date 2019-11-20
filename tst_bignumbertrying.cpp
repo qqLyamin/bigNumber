@@ -35,3 +35,13 @@ void bigNumberTrying::caseWithWrongNumbers()
 
     QCOMPARE(test.getSumm(A, B), result);
 }
+
+void bigNumberTrying::caseWithNegative()
+{
+    bigNumber A = bigNumber("1");
+    bigNumber B = bigNumber("-5");
+    bigNumber result = bigNumber("-4");
+    biSumms test = biSumms();
+
+    QCOMPARE(test.getSumm(A, B), result);
+}

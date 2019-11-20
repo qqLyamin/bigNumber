@@ -16,10 +16,6 @@ public:
 private slots:
     void caseOfTwoSameNumbers();
     void caseWithZeros();
-//    void caseWithNegative();
     void caseWithWrongNumbers();
+    void caseWithNegative();
 };
-
-//QTEST_APPLESS_MAIN(bigNumberTrying)
-
-//#include "tst_bignumbertrying.moc"

@@ -25,6 +25,7 @@ class bigNumber
 {
     short arr[SIZE_OF_ARRAY];
     short currentSize = 0;
+    bool Negative = false;
     quint sizeOfInt = sizeof(int);
 public:
     bigNumber(){
@@ -34,10 +35,17 @@ public:
 
     bigNumber & operator+(const bigNumber & other);
     bigNumber & operator=(const bigNumber & other);
+    bool operator->*(const bigNumber & other);//thats MOD operator >
+    bool operator>(const bigNumber & other);
 
     friend bool operator==(const bigNumber & left, const bigNumber & right);
     friend std::ostream & operator<< (std::ostream &out, const bigNumber & number);
-    short getSize();
+    short getSize() const;
+    bool isNegative() const;
+    bool isPositive() const;
+
+    void setNegative();
+    void setPositive();
 };
 
 #endif // BIGNUMBER_H
