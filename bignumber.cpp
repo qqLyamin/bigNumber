@@ -96,3 +96,16 @@ std::ostream& operator<< (std::ostream &out, const bigNumber & number) {
     }
     return out;
 }
+
+bool operator==(const bigNumber &left, const bigNumber &right)
+{
+    if (left.currentSize == right.currentSize) {
+        for (int i = 0; i < right.currentSize; ++i) {
+            if (left.arr[i] != right.arr[i]) return false;
+        }
+    } else {
+        return false;
+    }
+
+    return true;
+}

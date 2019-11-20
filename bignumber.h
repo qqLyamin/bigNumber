@@ -8,6 +8,7 @@ typedef unsigned int quint;
 #define MAX_CHAR 512 //максимум знаков в числе
 #define BIG_BASE 10000 //база счисления(на ячейку)
 #define SIZE_OF_ARRAY MAX_CHAR / 4 //10000 - short
+#define DIMENSION 65526
 
 template <typename T>
 void invert_string( T & tmp ) {
@@ -34,6 +35,7 @@ public:
     bigNumber & operator+(const bigNumber & other);
     bigNumber & operator=(const bigNumber & other);
 
+    friend bool operator==(const bigNumber & left, const bigNumber & right);
     friend std::ostream & operator<< (std::ostream &out, const bigNumber & number);
     short getSize();
 };
