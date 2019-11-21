@@ -10,6 +10,7 @@ bigNumber::bigNumber(const QString & income)
         for (int i = 0; i < income.length(); ++i) {
             if (!income[i].isNumber()) {
                 isValid = false;
+                if (i == 0 && income[0] == '-') isValid = true;
             }
         }
     }
@@ -20,6 +21,7 @@ bigNumber::bigNumber(const QString & income)
         while ( length > 0 ) {
             for (int i = 0; i < 4 ; ++i, --length) {
                 if (length == 0) break;
+                if (income[length - 1] == '-') continue;
                 tmpNumber += income[length - 1];
             }
             invert_string(tmpNumber);
@@ -31,6 +33,7 @@ bigNumber::bigNumber(const QString & income)
     } else {
         currentSize = 1;
     }
+    if (isValid && income[0] == '-') this->setNegative();
 }
 
 bigNumber & bigNumber::operator+(const bigNumber & other)
@@ -73,6 +76,7 @@ bigNumber & bigNumber::operator+(const bigNumber & other)
                 if (arr[i] < other.arr[i]) {
                     this->arr[i] = (other.arr[i] - arr[i]) % 10000;
                 } else {
+                    if (arr[i] == other.arr[i]) this->arr[i] = 0; continue;
                     this->arr[i] = (10000 + other.arr[i] - arr[i]) % 10000;
                     this->arr[i + 1] -= 1;
                 }
@@ -84,28 +88,37 @@ bigNumber & bigNumber::operator+(const bigNumber & other)
     if (this->isNegative() && other.isPositive()) {
         for ( int i = 0 ; i < maxSize; ++i ) {
             short tmp = arr[i];
-            if (!(*this ->* other)) {
+            if (*this ->* other) {
                 if (arr[i] < other.arr[i]) {
                     this->arr[i] = (other.arr[i] - arr[i]) % 10000;
                 } else {
-                    this->arr[i] = (10000 + other.arr[i] - arr[i]) % 10000;
-                    this->arr[i + 1] += 1;
-                }
-                isNegativeAnswer = false;
-            } else {
-                if (arr[i] < other.arr[i]) {
-                    this->arr[i] = (other.arr[i] - arr[i]) % 10000;
-                } else {
-                    this->arr[i] = (10000 + other.arr[i] - arr[i]) % 10000;
-                    this->arr[i + 1] += 1;
+                    //if (arr[i] == other.arr[i]) this->arr[i] = 0; continue;
+                    this->arr[i] = (arr[i] - other.arr[i]) % 10000;
                 }
                 isNegativeAnswer = true;
+            } else {
+                if (arr[i] > other.arr[i]) {
+                    this->arr[i] = (arr[i] - other.arr[i]) % 10000;
+                } else {
+                    if (arr[i] == other.arr[i]) this->arr[i] = 0; continue;
+                    this->arr[i] = (10000 + arr[i] - other.arr[i]) % 10000;
+                    this->arr[i + 1] -= 1;
+                }
+                isNegativeAnswer = false;
             }
-
         }
     }
 
     currentSize = maxSize;
+
+    if (arr[0] != 0 || currentSize != 1) {
+        for (int i = currentSize; i > 1; --i) {
+            if (this->arr[i - 1] == 0) currentSize -= 1;
+        }
+    }
+
+    if (arr[currentSize - 1] == 0 && currentSize > 1) currentSize -= 1;
+
     if (saturation) {
         arr[maxSize] = 1;
         currentSize += 1;
@@ -123,6 +136,7 @@ bigNumber & bigNumber::operator+(const bigNumber & other)
 bigNumber & bigNumber::operator=(const bigNumber & other)
 {
     currentSize = other.currentSize;
+    Negative = other.Negative;
     for (int i = 0; i < currentSize; ++i) {
         arr[i] = other.arr[i];
     }
@@ -132,10 +146,11 @@ bigNumber & bigNumber::operator=(const bigNumber & other)
 bool bigNumber::operator->*(const bigNumber & other)//thats MOD operator >
 {
     if (this->currentSize == other.currentSize) {
-        for (int i = currentSize - 1; i > 0; --i) {
-            if (this->arr[currentSize - 1] == other.arr[currentSize - 1]) continue;
-            return this->arr[currentSize - 1] > other.arr[currentSize - 1];
+        for (int i = currentSize; i > 0; --i) {
+            if (this->arr[i - 1] == other.arr[i - 1]) continue;
+            return this->arr[i - 1] > other.arr[i - 1];
         }
+        return false;
     } else {
         return this->currentSize > other.currentSize;
     }
@@ -216,5 +231,5 @@ bool operator==(const bigNumber &left, const bigNumber &right)
         return false;
     }
 
-    return true;
+    return (left.isPositive() && right.isPositive()) || (left.isNegative() && right.isNegative());
 }
