@@ -14,11 +14,13 @@ bigNumber::bigNumber(const QString & income)
             }
         }
     }
+    if (isValid && income[0] == '-' && income[1] == '0') isValid = false;
     if (isValid) {
         short outputIndex = 0;
         int length = income.length();
         QString tmpNumber;
         while ( length > 0 ) {
+            if (length == 1 && income[0] == '-') break;
             for (int i = 0; i < 4 ; ++i, --length) {
                 if (length == 0) break;
                 if (income[length - 1] == '-') continue;
@@ -39,6 +41,7 @@ bigNumber::bigNumber(const QString & income)
 bigNumber & bigNumber::operator+(const bigNumber & other)
 {
     int saturation = 0;
+    int negativeSaturation = 0;
     short maxSize;
     bool isNegativeAnswer = false;
     maxSize = currentSize > other.currentSize ? currentSize : other.currentSize;
@@ -62,23 +65,25 @@ bigNumber & bigNumber::operator+(const bigNumber & other)
     }
 
     if (this->isPositive() && other.isNegative()) {
+        bigNumber tmp = other;
         for ( int i = 0 ; i < maxSize; ++i ) {
-            short tmp = arr[i];
-            if (*this ->* other) {
-                if (arr[i] > other.arr[i]) {
-                    this->arr[i] = (arr[i] - other.arr[i]) % 10000;
-                } else {
-                    this->arr[i] = (10000 + arr[i] - other.arr[i]) % 10000;
-                    this->arr[i + 1] -= 1;
+            if (*this ->* tmp) { //вычитаем всегда ИЗ arr[i]
+                if (arr[i] > tmp.arr[i]) { //eсли мы больше ВЫЧИТАЕМОГО
+                    arr[i] = arr[i] - tmp.arr[i];
+                } else if (arr[i] == tmp.arr[i]) {
+                    arr[i] = 0;
+                } else if (tmp.arr[i] > arr[i]) { //Если армия врага больше нашей
+                    arr[i] = arr[i] + 10000 - tmp.arr[i];
+                    tmp.arr[i + 1] += 1;
                 }
-                isNegativeAnswer = false;
-            } else {
-                if (arr[i] < other.arr[i]) {
-                    this->arr[i] = (other.arr[i] - arr[i]) % 10000;
-                } else {
-                    if (arr[i] == other.arr[i]) this->arr[i] = 0; continue;
-                    this->arr[i] = (10000 + other.arr[i] - arr[i]) % 10000;
-                    this->arr[i + 1] -= 1;
+            } else { //вычитаем всегда ИЗ tmp
+                if (tmp.arr[i] > arr[i]) { //eсли мы больше ВЫЧИТАЕМОГО
+                    arr[i] = tmp.arr[i] - arr[i];
+                } else if (arr[i] == tmp.arr[i]) {
+                    arr[i] = 0;
+                } else if (tmp.arr[i] > arr[i]) { //Если армия врага больше нашей
+                    arr[i] = tmp.arr[i] + 10000 - arr[i];
+                    arr[i + 1] += 1;
                 }
                 isNegativeAnswer = true;
             }
@@ -86,25 +91,27 @@ bigNumber & bigNumber::operator+(const bigNumber & other)
     }
 
     if (this->isNegative() && other.isPositive()) {
+        bigNumber tmp = other;
         for ( int i = 0 ; i < maxSize; ++i ) {
-            short tmp = arr[i];
-            if (*this ->* other) {
-                if (arr[i] < other.arr[i]) {
-                    this->arr[i] = (other.arr[i] - arr[i]) % 10000;
-                } else {
-                    //if (arr[i] == other.arr[i]) this->arr[i] = 0; continue;
-                    this->arr[i] = (arr[i] - other.arr[i]) % 10000;
+            if (*this ->* tmp) { //вычитаем всегда ИЗ arr[i]
+                if (arr[i] > tmp.arr[i]) { //eсли мы больше ВЫЧИТАЕМОГО
+                    arr[i] = arr[i] - tmp.arr[i];
+                } else if (arr[i] == tmp.arr[i]) {
+                    arr[i] = 0;
+                } else if (tmp.arr[i] > arr[i]) { //Если армия врага больше нашей
+                    arr[i] = arr[i] + 10000 - tmp.arr[i];
+                    tmp.arr[i + 1] += 1;
                 }
                 isNegativeAnswer = true;
-            } else {
-                if (arr[i] > other.arr[i]) {
-                    this->arr[i] = (arr[i] - other.arr[i]) % 10000;
-                } else {
-                    if (arr[i] == other.arr[i]) this->arr[i] = 0; continue;
-                    this->arr[i] = (10000 + arr[i] - other.arr[i]) % 10000;
-                    this->arr[i + 1] -= 1;
+            } else { //вычитаем всегда ИЗ tmp
+                if (tmp.arr[i] > arr[i]) { //eсли мы больше ВЫЧИТАЕМОГО
+                    arr[i] = tmp.arr[i] - arr[i];
+                } else if (arr[i] == tmp.arr[i]) {
+                    arr[i] = 0;
+                } else if (arr[i] > tmp.arr[i]) { //Если армия врага больше нашей
+                    arr[i] = tmp.arr[i] + 10000 - arr[i];
+                    arr[i + 1] += 1;
                 }
-                isNegativeAnswer = false;
             }
         }
     }
@@ -123,6 +130,8 @@ bigNumber & bigNumber::operator+(const bigNumber & other)
         arr[maxSize] = 1;
         currentSize += 1;
     }
+
+    if (this->currentSize == 1 && this->arr[0] == 0) isNegativeAnswer = false;
 
     if (isNegativeAnswer) {
         this->setNegative();

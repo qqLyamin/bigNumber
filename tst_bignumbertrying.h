@@ -14,34 +14,80 @@ public:
     bigNumberTrying();
 
 private slots:
-    void targetCase();
-    void targetCase2();
 
-    void caseOfMinus1();
+    //POSITIVE:
+    void positiveSameNumbers();
+    void positiveDifferentNumbers();
+    void positiveDifferentNumbersSwitched();
 
-    void caseOfTwoSameNumbers();
-    void caseOfTwoSameNumbersWithDifferentSign();
-    void caseOfTwoSameNumbersWithDifferentSign2();
+    //POSITIVE + NEGATIVE:
+    void positiveNegative();
+    void negativePositive();
 
-    void caseOfTwoSameNumbersWithDifferentSignSwitched();
-    void caseOfTwoSameNumbersWithDifferentSignSwitched2();
+    void positiveNegativeSwitched();
+    void negativePositiveSwitched();
 
-    void caseWithZeros();
-    void caseWithWrongNumbers();
+    void positiveNegativeSame();
+    void negativePositiveSame();
 
-    void caseWithFirstNegative();
-    void caseWithSecondNegative();
+    //TWO NEGATIVE:
+    void negativeNegative();
+    void negativeNegativeSwitched();
+    void negativeNegativeSame();
 
-    void caseTwoBigNegative();
-    void caseTwoBigPositive();
+    //TRASH WITH NORMAL:
+    void trashPlusNormal();
+    void normalPlusTrash();
+    void trashPlusTrash();
 
-    void caseWithNegativeSignFirst();
-    void caseWithNegativeSignSecond();
-    void caseWithNegativeSignBoth();
+    //ZEROS WITH OK:
+    void zeroPlusOk();
+    void okPlusZero();
+    void zeroPlusZero();
 
-    void caseWithFirstBigNegative();
-    void caseWithSecondBigNegative();
-    void caseWithNegativeSignBothBig();
+    //EXTREMAL SITUATIONS:
+    void ninesPlusOne();
+    void ninesPlusOneSwitched();
+    void millionPlusOneNegative();
+    void millionPlusOneNegativeSwitched();
+    void millionNegativePlusOnePositive();
 
-    void caseWrongMinus();
+//DESIGN TIME CASES:
+//    void caseNines();
+//    void caseNinesSwitch();
+
+//    void caseNegativeNines();
+//    void caseNegativeNinesSwitch();
+
+//    void targetCase();
+//    void targetCase2();
+
+//    void caseOfMinus1();
+//    void caseOfMinus01();
+
+//    void caseOfTwoSameNumbers();
+//    void caseOfTwoSameNumbersWithDifferentSign();
+//    void caseOfTwoSameNumbersWithDifferentSign2();
+
+//    void caseOfTwoSameNumbersWithDifferentSignSwitched();
+//    void caseOfTwoSameNumbersWithDifferentSignSwitched2();
+
+//    void caseWithZeros();
+//    void caseWithWrongNumbers();
+
+//    void caseWithFirstNegative();
+//    void caseWithSecondNegative();
+
+//    void caseTwoBigNegative();
+//    void caseTwoBigPositive();
+
+//    void caseWithNegativeSignFirst();
+//    void caseWithNegativeSignSecond();
+//    void caseWithNegativeSignBoth();
+
+//    void caseWithFirstBigNegative();
+//    void caseWithSecondBigNegative();
+//    void caseWithNegativeSignBothBig();
+
+//    void caseWrongMinus();
 };
